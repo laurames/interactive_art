@@ -9,12 +9,13 @@ float prevY, eegValue;
 void setup() {
   size(600, 200);
 
-  /* start oscP5, listening for incoming messages at recvPort */
+  // start oscP5, listening for incoming messages at recvPort
   oscP5 = new OscP5(this, recvPort);
   background(0);
 
   //frameRate(1); To plot the graph at 1 point per second 
   frameRate(30);
+  
   drawStuff();
 }
 
