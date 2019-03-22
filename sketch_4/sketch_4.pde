@@ -15,13 +15,13 @@ void setup(){
   background(0);
 
   //frameRate(1); To plot the graph at 1 point per second 
-  frameRate(30);
+  frameRate(2);
 }
 
 void oscEvent(OscMessage msg) {
   if (msg.checkAddrPattern("/muse/eeg")==true) {
-    //eegValue = msg.get(0).floatValue();
-    mappedValue = msg.get(0).floatValue();
+    eegValue = msg.get(0).floatValue();
+    mappedValue = map(eegValue, 50, 1600 , 0 , 255); 
     //eegValue = ( (msg.get(0).floatValue()-0)/(1600-0))*(200-0);
     //System.out.print( ((eegValue-0)/(1600-0))*(600-0) + "\n");
   }
@@ -31,6 +31,7 @@ int ofs =0;
 int ofs_v =1;
 
 void draw(){
+  background(0);
   translate(0,-200);
   ofs+=ofs_v;
  if((ofs==offset) || (ofs==0))
@@ -39,10 +40,11 @@ void draw(){
   }
   
   strokeWeight(6);
-  drawLine(212+ofs,#DB028C,#FFAE34);
-  drawLine(215+ofs,#FF6A7E,#FFFA6A);//color
+  drawLine(212+ofs,int(mappedValue),#FFAE34);
+  drawLine(215+ofs,#FF6A7E,int(mappedValue));//color
   strokeWeight(1);
-  drawLine(210+ofs,100,100);
+  //drawLine(210+ofs,100,100);
+  drawLine(210+ofs,int(mappedValue),int(mappedValue));
   
   System.out.println(eegValue);
 }
@@ -60,7 +62,7 @@ fill(255,4);
   //curveVertex(eegValue,y0);
   for (int i =0 ; i<width/step+3;i+=1){
      float noiseVal = noise(i*noiseScale*(y0*0.06), frameCount*noiseScale); 
-     stroke(lerpColor(from,to,eegValue));
+     stroke(lerpColor(from,to,noiseVal));
      curveVertex(i*step-10,y0+noiseVal*offset);
     
   }
